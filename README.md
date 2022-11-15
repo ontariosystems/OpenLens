@@ -1,7 +1,7 @@
 # OpenLens
 ---
 [![Latest Release](https://img.shields.io/github/release/ontariosystems/OpenLens.svg)](https://github.com/ontariosystems/OpenLens/releases)
-[![Build Status](https://github.com/ontariosystems/OpenLens/actions/workflows/build.yml/badge.svg)](https://github.com/ontariosystems/OpenLens/actions/workflows/build.yml)
+[![Build Status](https://github.com/ontariosystems/OpenLens/actions/workflows/main.yml/badge.svg)](https://github.com/ontariosystems/OpenLens/actions/workflows/main.yml)
 
 ## Overview
 ---
