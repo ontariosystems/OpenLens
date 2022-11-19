@@ -35,6 +35,7 @@ jobs:
           node update.js
       - name: Prep
         working-directory: lens
+        shell: bash
         run : |
           make binaries/client build-extensions
           if [ "$RUNNER_OS" == "Windows" ]; then
@@ -42,6 +43,7 @@ jobs:
           fi
       - name: Build Lens
         working-directory: lens
+        shell: bash
         run : |
           yarn run compile
           if [ "$RUNNER_OS" == "Windows" ]; then
