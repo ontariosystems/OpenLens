@@ -24,20 +24,24 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.16.0
-      - name: Update Lens
+      - name: Checkout Lens
         run: |
-          git clone https://github.com/lensapp/lens.git
-          cp update.js lens/update.js
-          cd lens
-          git checkout v${{ env.LENS_VERSION }}
+          git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
+
+      - name: Update Lens
+        working-directory: lens
+        run: |
+          cp ../update.js update.js
           node update.js
       - name: Prep
+        working-directory: lens
         run : |
           make binaries/client build-extensions
           if [ "$RUNNER_OS" == "Windows" ]; then
             choco install visualstudio2019buildtools visualstudio2019-workload-vctools
           fi
       - name: Build Lens
+        working-directory: lens
         run : |
           yarn run compile
           if [ "$RUNNER_OS" == "Windows" ]; then
