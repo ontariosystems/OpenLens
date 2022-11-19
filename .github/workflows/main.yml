@@ -27,7 +27,6 @@ jobs:
       - name: Checkout Lens
         run: |
           git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
-
       - name: Update Lens
         working-directory: lens
         run: |
@@ -35,13 +34,15 @@ jobs:
           node update.js
       - name: Prep
         working-directory: lens
+        shell: bash
         run : |
-          make binaries/client build-extensions
+          make node_modules binaries/client build-extensions
           if [ "$RUNNER_OS" == "Windows" ]; then
             choco install visualstudio2019buildtools visualstudio2019-workload-vctools
           fi
       - name: Build Lens
         working-directory: lens
+        shell: bash
         run : |
           yarn run compile
           if [ "$RUNNER_OS" == "Windows" ]; then
