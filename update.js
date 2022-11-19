@@ -3,6 +3,8 @@ const fs = require('fs');
 var packagejson = require('./package.json');
 
 packagejson.build.publish = [{
+    owner: "ontariosystem",
+    repo: "ontariosystems/OpenLens",
     provider: "github"
 }];
 
