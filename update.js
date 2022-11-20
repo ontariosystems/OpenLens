@@ -4,7 +4,7 @@ var packagejson = require('./package.json');
 
 packagejson.build.publish = [{
     owner: "ontariosystem",
-    repo: "ontariosystems/OpenLens",
+    repo: "OpenLens",
     provider: "github"
 }];
 
