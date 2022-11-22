@@ -32,12 +32,14 @@ runs:
     - name: Build Windows
       if: runner.os == 'Windows'
       run: make build
+      shell: bash
       env:
         CSC_LINK: ${{ inputs.win-certs }}
         CSC_KEY_PASSWORD: ${{ inputs.win-certs-password }}
     - name: Build Macos
       if: runner.os == 'macOS'
       run: make build ELECTRON_BUILD_EXTRA_ARGS='--arm64 --x64'
+      shell: bash
       env:
         CSC_LINK: ${{ inputs.mac-certs }}
         CSC_KEY_PASSWORD: ${{ inputs.mac-certs-password }}
