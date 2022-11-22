@@ -39,7 +39,7 @@ jobs:
       - name: Build Lens app
         uses: ./.github/actions/build
         with:
-          working-directory: ./lens
+          lens-path: ./lens
           win-certs: ${{ secrets.WIN_CERT }}
           win-certs-password: ${{ secrets.WIN_PASS }}
           # mac-certs: $${{ secrets.MAC_CERT }}

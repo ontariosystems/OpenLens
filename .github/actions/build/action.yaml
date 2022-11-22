@@ -17,8 +17,8 @@ inputs:
     description: 'The password to decrypt the certificate given in CSC_LINK for MacOS'
     required: false
     default: ''
-  working-directory:
-    description: 'The working directory to run the script in (defaults to current)'
+  lens-path:
+    description: 'The path to lens to run the script in (defaults to current)'
     required: false
     default: '.'
 
@@ -27,20 +27,26 @@ runs:
   steps:
     - name: Build Linux
       if: runner.os == 'Linux'
-      run: make build ELECTRON_BUILD_EXTRA_ARGS='--x64 --arm64'
       shell: bash
+      run: |
+        cd ${{ inputs.lens-path }}
+        make build ELECTRON_BUILD_EXTRA_ARGS='--x64 --arm64'
     - name: Build Windows
-      if: runner.os == 'Windows'
-      run: make build
-      shell: bash
       env:
         CSC_LINK: ${{ inputs.win-certs }}
         CSC_KEY_PASSWORD: ${{ inputs.win-certs-password }}
-    - name: Build Macos
-      if: runner.os == 'macOS'
-      run: make build ELECTRON_BUILD_EXTRA_ARGS='--arm64 --x64'
+if: runner.os == 'Windows'
+      run: |
+        cd ${{ inputs.lens-path }}
+        make build
       shell: bash
+    - name: Build Macos
       env:
         CSC_LINK: ${{ inputs.mac-certs }}
         CSC_KEY_PASSWORD: ${{ inputs.mac-certs-password }}
+      if: runner.os == 'macOS'
+      run: |
+        cd ${{ inputs.lens-path }}
+        make build ELECTRON_BUILD_EXTRA_ARGS='--arm64 --x64'
+      shell: bash
 
