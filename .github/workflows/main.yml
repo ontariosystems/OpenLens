@@ -49,13 +49,14 @@ jobs:
             rm -rf node_modules/win-ca/pem
           fi
       - name: Build/release Lens app
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: mebays/action-electron-builder@node-16
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          args: "--publish onTag --x64 --arm64"
+          github_token: ${{ github.token }}
+          args: "--x64 --arm64"
           skip_build: true
           max_attempts: 2
           package_root: "lens"
+          release: true
           # windows_certs: ${{ secrets.WIN_CERT }}
           # windows_certs_password: ${{ secrets.WIN_PASS }}
           # mac_certs: $${{ secrets.MAC_CERT }}
