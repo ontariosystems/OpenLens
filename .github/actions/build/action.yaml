@@ -30,7 +30,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.lens-path }}
-        make build ELECTRON_BUILD_EXTRA_ARGS='--x64 --arm64'
+        make build ELECTRON_BUILDER_EXTRA_ARGS='--linux --x64 --arm64'
     - name: Build Windows
       env:
         CSC_LINK: ${{ inputs.win-certs }}
@@ -38,7 +38,7 @@ runs:
       if: runner.os == 'Windows'
       run: |
         cd ${{ inputs.lens-path }}
-        make build
+        make build ELECTRON_BUILDER_EXTRA_ARGS='--win'
       shell: bash
     - name: Build Macos
       env:
@@ -47,6 +47,6 @@ runs:
       if: runner.os == 'macOS'
       run: |
         cd ${{ inputs.lens-path }}
-        make build ELECTRON_BUILD_EXTRA_ARGS='--arm64 --x64'
+        make build ELECTRON_BUILDER_EXTRA_ARGS='--mac --arm64 --x64'
       shell: bash
 
