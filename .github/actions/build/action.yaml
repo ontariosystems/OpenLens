@@ -17,6 +17,10 @@ inputs:
     description: 'The password to decrypt the certificate given in CSC_LINK for MacOS'
     required: false
     default: ''
+  working-directory:
+    description: 'The working directory to run the script in (defaults to current)'
+    required: false
+    default: '.'
 
 runs:
   using: composite

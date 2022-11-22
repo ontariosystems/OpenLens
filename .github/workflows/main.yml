@@ -37,8 +37,8 @@ jobs:
           choco install visualstudio2019buildtools visualstudio2019-workload-vctools
       - name: Build Lens app
         uses: ./.github/actions/build
-        working-directory: lens
         with:
+          working-directory: lens
           win-certs: ${{ secrets.WIN_CERT }}
           win-certs-password: ${{ secrets.WIN_PASS }}
           # mac-certs: $${{ secrets.MAC_CERT }}
