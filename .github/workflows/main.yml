@@ -27,7 +27,8 @@ jobs:
       - name: Checkout Lens
         run: |
           git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
-          cp ../update.js update.js
+          cp update.js lens/update.js
+          cd lens
           node update.js
       - name: Windows Prep
         if: runner.os == 'Windows'
