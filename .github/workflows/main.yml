@@ -27,37 +27,20 @@ jobs:
       - name: Checkout Lens
         run: |
           git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
-      - name: Update Lens
-        working-directory: lens
-        run: |
           cp ../update.js update.js
           node update.js
-      - name: Prep
+      - name: Windows Prep
+        if: runner.os == 'Windows'
         working-directory: lens
         shell: bash
         run : |
-          make node_modules binaries/client build-extensions
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            choco install visualstudio2019buildtools visualstudio2019-workload-vctools
-          fi
-      - name: Build Lens
+          choco install visualstudio2019buildtools visualstudio2019-workload-vctools
+      - name: Build Lens app
+        uses: ./.github/actions/build
         working-directory: lens
-        shell: bash
-        run : |
-          yarn run compile
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            rm -rf node_modules/win-ca/pem
-          fi
-      - name: Build/release Lens app
-        uses: samuelmeuli/action-electron-builder@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          args: "--publish onTag --x64 --arm64"
-          skip_build: true
-          max_attempts: 2
-          package_root: "lens"
-          # windows_certs: ${{ secrets.WIN_CERT }}
-          # windows_certs_password: ${{ secrets.WIN_PASS }}
-          # mac_certs: $${{ secrets.MAC_CERT }}
-          # mac_certs_password: $${{ secrets.MAC_PASS }}
+          win-certs: ${{ secrets.WIN_CERT }}
+          win-certs-password: ${{ secrets.WIN_PASS }}
+          # mac-certs: $${{ secrets.MAC_CERT }}
+          # mac-certs-password: $${{ secrets.MAC_PASS }}
 

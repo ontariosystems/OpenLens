@@ -1,0 +1,40 @@
+name: build
+description: build lens
+inputs:
+  win-certs:
+    description: 'The HTTPS link (or base64-encoded data) to Windows Code Signing certificate.'
+    required: false
+    default: ''
+  win-certs-password:
+    description: 'The password to decrypt the certificate given in CSC_LINK for windows'
+    required: false
+    default: ''
+  mac-certs:
+    description: 'The HTTPS link (or base64-encoded data) to MacOS Code Signing certificate.'
+    required: false
+    default: ''
+  mac-certs-password:
+    description: 'The password to decrypt the certificate given in CSC_LINK for MacOS'
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Build Linux
+      if: runner.os == 'Linux'
+      run: make build ELECTRON_BUILD_EXTRA_ARGS='--x64 --arm64'
+      shell: bash
+    - name: Build Windows
+      if: runner.os == 'Windows'
+      run: make build
+      env:
+        CSC_LINK: ${{ inputs.win-certs }}
+        CSC_KEY_PASSWORD: ${{ inputs.win-certs-password }}
+    - name: Build Macos
+      if: runner.os == 'macOS'
+      run: make build ELECTRON_BUILD_EXTRA_ARGS='--arm64 --x64'
+      env:
+        CSC_LINK: ${{ inputs.mac-certs }}
+        CSC_KEY_PASSWORD: ${{ inputs.mac-certs-password }}
+
