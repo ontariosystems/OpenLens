@@ -35,7 +35,7 @@ runs:
       env:
         CSC_LINK: ${{ inputs.win-certs }}
         CSC_KEY_PASSWORD: ${{ inputs.win-certs-password }}
-if: runner.os == 'Windows'
+      if: runner.os == 'Windows'
       run: |
         cd ${{ inputs.lens-path }}
         make build
