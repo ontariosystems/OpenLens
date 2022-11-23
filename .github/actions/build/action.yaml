@@ -30,7 +30,7 @@ runs:
       run: |
         cd ${{ inputs.lens-path }}
         make node_modules binaries/client
-        make build-extensions
+        make build-extensions -B
         yarn run build:tray-icons
         yarn run compile
     - name: Build Linux
