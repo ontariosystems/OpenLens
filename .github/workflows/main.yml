@@ -30,12 +30,12 @@ jobs:
           cp update.js lens/update.js
           cd lens
           node update.js
-      - name: Windows Prep
-        if: runner.os == 'Windows'
-        working-directory: lens
-        shell: bash
-        run : |
-          choco install visualstudio2019buildtools visualstudio2019-workload-vctools
+      #- name: Windows Prep
+      #  if: runner.os == 'Windows'
+      #  working-directory: lens
+      #  shell: bash
+      #  run : |
+      #    choco install visualstudio2019buildtools visualstudio2019-workload-vctools
       - name: Build Lens app
         uses: ./.github/actions/build
         with:
