@@ -23,7 +23,7 @@ jobs:
         shell: bash
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
+          node-version: 16
       - name: Checkout Lens
         run: |
           git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
