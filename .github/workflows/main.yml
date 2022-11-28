@@ -29,19 +29,25 @@ jobs:
           fetch-depth: 0
           path: lens
           ref: v${{ env.LENS_VERSION }}
-      - uses: actions/setup-node@v3
+      - name: Using Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Checkout Lens
+      
+      - name: Update Lens
         working-directory: lens
         run: |
           cp ../update.js update.js
           node update.js
+      
       - name: Build Linux Lens
         working-directory: lens
         run: make build
         shell: bash
         if: ${{ runner.os == 'Linux' }}
+        env:
+          ELECTRON_BUILDER_EXTRA_ARGS: "--x64 --arm64"
+      
       - name: Build macOS Lens
         working-directory: lens
         run: make build
@@ -49,12 +55,13 @@ jobs:
         if: ${{ runner.os == 'macOS' }}
         env:
           ELECTRON_BUILDER_EXTRA_ARGS: "--x64 --arm64"
+      
       - name: Build Windows Lens
         working-directory: lens
         run: make build
         shell: bash
         if: ${{ runner.os == 'Windows' }}
         env:
-          ELECTRON_BUILDER_EXTRA_ARGS: "--x64 --ia32"
-          #CSC_LINK: ${{ secrets.win-certs }}
-          #CSC_KEY_PASSWORD: ${{ secrets.win-certs-password }}
+          ELECTRON_BUILDER_EXTRA_ARGS: "--x64"
+          #CSC_LINK: ${{ secrets.win-cert-link }}
+          #CSC_KEY_PASSWORD: ${{ secrets.win-cert-password }}
