@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 360
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3
       - name: Export version to variable
         run: |
             export LENS_VERSION=$(cat version)
@@ -40,8 +40,8 @@ jobs:
         uses: ./.github/actions/build
         with:
           lens-path: ./lens
-          win-certs: ${{ secrets.WIN_CERT }}
-          win-certs-password: ${{ secrets.WIN_PASS }}
+          #win-certs: ${{ secrets.WIN_CERT }}
+          #win-certs-password: ${{ secrets.WIN_PASS }}
           # mac-certs: $${{ secrets.MAC_CERT }}
           # mac-certs-password: $${{ secrets.MAC_PASS }}
 
