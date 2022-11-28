@@ -10,7 +10,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-2019, ubuntu-20.04, macos-11]
+        node-version: [16.x]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 360
     steps:
@@ -21,27 +22,39 @@ jobs:
             export LENS_VERSION=$(cat version)
             echo "LENS_VERSION=$LENS_VERSION" >> $GITHUB_ENV
         shell: bash
+      - name: Checkout Lens
+        uses: actions/checkout@v3
+        with:
+          repository: https://github.com/lensapp/lens.git
+          fetch-depth: 0
+          path: lens
+          ref: v${{ env.LENS_VERSION }}
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node-version }}
       - name: Checkout Lens
+        working-directory: lens
         run: |
-          git clone https://github.com/lensapp/lens.git -b v${{ env.LENS_VERSION }}
-          cp update.js lens/update.js
-          cd lens
+          cp ../update.js update.js
           node update.js
-      #- name: Windows Prep
-      #  if: runner.os == 'Windows'
-      #  working-directory: lens
-      #  shell: bash
-      #  run : |
-      #    choco install visualstudio2019buildtools visualstudio2019-workload-vctools
-      - name: Build Lens app
-        uses: ./.github/actions/build
-        with:
-          lens-path: ./lens
-          #win-certs: ${{ secrets.WIN_CERT }}
-          #win-certs-password: ${{ secrets.WIN_PASS }}
-          # mac-certs: $${{ secrets.MAC_CERT }}
-          # mac-certs-password: $${{ secrets.MAC_PASS }}
-
+      - name: Build Linux Lens
+        working-directory: lens
+        run: make build
+        shell: bash
+        if: ${{ runner.os == 'Linux' }}
+      - name: Build macOS Lens
+        working-directory: lens
+        run: make build
+        shell: bash
+        if: ${{ runner.os == 'macOS' }}
+        env:
+          ELECTRON_BUILDER_EXTRA_ARGS: "--x64 --arm64"
+      - name: Build Windows Lens
+        working-directory: lens
+        run: make build
+        shell: bash
+        if: ${{ runner.os == 'Windows' }}
+        env:
+          ELECTRON_BUILDER_EXTRA_ARGS: "--x64 --ia32"
+          #CSC_LINK: ${{ secrets.win-certs }}
+          #CSC_KEY_PASSWORD: ${{ secrets.win-certs-password }}
