@@ -25,12 +25,20 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Node Build
+      shell: bash
+      run: |
+        cd ${{ inputs.lens-path }}
+        make node_modules binaries/client
+        make build-extensions -B
+        yarn run build:tray-icons
+        yarn run compile
     - name: Build Linux
       if: runner.os == 'Linux'
       shell: bash
       run: |
         cd ${{ inputs.lens-path }}
-        make build ELECTRON_BUILDER_EXTRA_ARGS='--linux --x64 --arm64'
+        yarn run electron-builder --linux --x64 --arm64
     - name: Build Windows
       env:
         CSC_LINK: ${{ inputs.win-certs }}
@@ -38,7 +46,8 @@ runs:
       if: runner.os == 'Windows'
       run: |
         cd ${{ inputs.lens-path }}
-        make build ELECTRON_BUILDER_EXTRA_ARGS='--win'
+        rm -rf node_modules/win-ca/pem
+        yarn run electron-builder --win
       shell: bash
     - name: Build Macos
       env:
@@ -47,6 +56,6 @@ runs:
       if: runner.os == 'macOS'
       run: |
         cd ${{ inputs.lens-path }}
-        make build ELECTRON_BUILDER_EXTRA_ARGS='--mac --arm64 --x64'
+        yarn run electron-builder --mac --arm64 --x64
       shell: bash
 
