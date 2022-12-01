@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-2019, ubuntu-20.04, macos-11]
         node-version: [16.x]
@@ -89,10 +90,10 @@ jobs:
           tag_name: v${{ env.LENS_VERSION }}
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: | 
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.dmg
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.AppImage
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.deb
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.rpm
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.dmg
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.AppImage
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.deb
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.rpm
             lens/dist/OpenLens-${{ env.LENS_VERSION }}*.zip
             lens/dist/OpenLens-${{ env.LENS_VERSION }}.exe
       
@@ -102,10 +103,10 @@ jobs:
         with:
           tag_name: Latest
           files: | 
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.dmg
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.AppImage
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.deb
-            lens/dist/OpenLens-${{ env.LENS_VERSION }}.rpm
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.dmg
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.AppImage
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.deb
+            lens/dist/OpenLens-${{ env.LENS_VERSION }}*.rpm
             lens/dist/OpenLens-${{ env.LENS_VERSION }}*.zip
             lens/dist/OpenLens-${{ env.LENS_VERSION }}.exe
             lens/dist/lates*.yml
