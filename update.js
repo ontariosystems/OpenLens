@@ -1,6 +1,7 @@
 const fs = require('fs');
+const packagePath = './lens/packages/open-lens/package.json';
 
-var packagejson = require('./package.json');
+var packagejson = require(packagePath);
 
 packagejson.build.publish = [{
     url: "https://github.com/ontariosystems/OpenLens/releases/download/Latest",
@@ -10,4 +11,4 @@ packagejson.build.publish = [{
 // This updates the naming of the artifact to not contain spaces vs the default 'OpenLens Setup ${version}.${ext}'
 packagejson.build.win.artifactName = "OpenLens-${version}.${ext}";
 
-fs.writeFileSync('package.json', JSON.stringify(packagejson));
+fs.writeFileSync(packagePath, JSON.stringify(packagejson));
