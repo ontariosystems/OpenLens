@@ -95,6 +95,18 @@ jobs:
           CSC_LINK: ${{ secrets.WIN_CERT_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
 
+      - name: Calculate Window checksum
+        run: certutil -hashfile OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe SHA256 | tee OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe.sha256
+        shell: bash
+        if: ${{ runner.os == 'Windows' }}
+        working-directory: lens/packages/open-lens/dist
+
+      - name: Calculate Linux and Mac checksum
+        run: for filename in OpenLens-${{ steps.version.outputs.LENS_VERSION }}*; do shasum -a 256 ${filename} | tee ${filename}.sha256 ; done
+        shell: bash
+        if: ${{ runner.os == 'Windows' || runner.os == 'macOS' }}
+        working-directory: lens/packages/open-lens/dist
+
       - uses: actions/upload-artifact@v3
         if: github.ref != 'refs/heads/main'
         with:
@@ -107,6 +119,7 @@ jobs:
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
 
       - name: Generate Changelog
         run: curl -s https://api.github.com/repos/lensapp/lens/releases/tags/${{ steps.version.outputs.LENS_VERSION }} | jq -r '.body' > ${{ github.workspace }}-CHANGELOG.txt
@@ -124,6 +137,7 @@ jobs:
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
 
       - name: Latest
         uses: softprops/action-gh-release@v0.1.15
@@ -137,4 +151,5 @@ jobs:
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
             lens/packages/open-lens/dist/lates*.yml
