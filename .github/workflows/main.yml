@@ -103,12 +103,12 @@ jobs:
           name: OpenLens-${{ matrix.os }}
           retention-days: 5
           path: |
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
 
       - name: Generate Changelog
         run: curl -s https://api.github.com/repos/lensapp/lens/releases/tags/${{ steps.version.outputs.LENS_VERSION }} | jq -r '.body' > ${{ github.workspace }}-CHANGELOG.txt
@@ -120,12 +120,12 @@ jobs:
           tag_name: v${{ steps.version.outputs.LENS_VERSION }}
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: |
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
 
       - name: Latest
         uses: softprops/action-gh-release@v0.1.15
@@ -133,10 +133,10 @@ jobs:
         with:
           tag_name: Latest
           files: |
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
-            packages/open-lens/dist/lates*.yml
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/packages/open-lens/dist/lates*.yml
