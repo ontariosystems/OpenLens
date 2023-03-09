@@ -34,7 +34,7 @@ jobs:
           repository: lensapp/lens
           fetch-depth: 1
           path: lens
-          ref: ${{ steps.version.outputs.LENS_VERSION }}
+          ref: v${{ steps.version.outputs.LENS_VERSION }}
 
       - name: Using Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -103,7 +103,7 @@ jobs:
           name: OpenLens-${{ matrix.os }}
           retention-days: 5
           path: |
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION[1:] }}*.dmg
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
@@ -117,7 +117,7 @@ jobs:
         uses: softprops/action-gh-release@v0.1.15
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: ${{ steps.version.outputs.LENS_VERSION }}
+          tag_name: v${{ steps.version.outputs.LENS_VERSION }}
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: |
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
