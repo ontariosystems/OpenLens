@@ -103,7 +103,7 @@ jobs:
           name: OpenLens-${{ matrix.os }}
           retention-days: 5
           path: |
-            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION[1:] }}*.dmg
+            packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
             packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
