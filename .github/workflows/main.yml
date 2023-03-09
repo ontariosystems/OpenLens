@@ -104,7 +104,7 @@ jobs:
       - name: Calculate Linux and Mac checksum
         run: for filename in OpenLens-${{ steps.version.outputs.LENS_VERSION }}*; do shasum -a 256 ${filename} | tee ${filename}.sha256 ; done
         shell: bash
-        if: ${{ runner.os == 'Windows' || runner.os == 'macOS' }}
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
         working-directory: lens/packages/open-lens/dist
 
       - uses: actions/upload-artifact@v3
