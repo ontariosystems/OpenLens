@@ -139,17 +139,21 @@ jobs:
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
             lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
 
-      - name: Latest
-        uses: softprops/action-gh-release@v0.1.15
-        if: github.ref == 'refs/heads/main'
-        with:
-          tag_name: Latest
-          files: |
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
-            lens/packages/open-lens/dist/lates*.yml
+      # Commenting out due to the need to install extensions after upgrading
+      # after a version.  This seemed safer than publishing to the auto upgrade
+      # link.
+      #
+      ##- name: Latest
+      ##  uses: softprops/action-gh-release@v0.1.15
+      ##  if: github.ref == 'refs/heads/main'
+      ##  with:
+      ##    tag_name: Latest
+      ##    files: |
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
+      ##      lens/packages/open-lens/dist/lates*.yml
