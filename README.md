@@ -9,7 +9,7 @@ This repository builds the binaries for the OpenLens project.  If any software i
 # Extensions
 --- 
 
-Staring with 6.3.0 some extensions are removed from the OpenLens repository.
+Starting with 6.3.0 some extensions are removed from the OpenLens repository.
 Currently looking into capability to package these during a build. Until then if
 the version of >= 6.3.0 it would be suggested to install the [Node/Pod Menu Extension](https://github.com/alebcay/openlens-node-pod-menu) 
 
