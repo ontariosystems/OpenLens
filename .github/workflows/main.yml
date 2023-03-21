@@ -1,11 +1,13 @@
 name: Build Lens
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '20 */6 * * *'
+  pull_request:
   push:
     branches:
       - main
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
