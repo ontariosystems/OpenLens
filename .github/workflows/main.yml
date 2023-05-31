@@ -46,17 +46,17 @@ jobs:
           node update.js
 
       - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
+        id: npm-cache-dir-path
         shell: bash
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
-        id: yarn-cache
+        id: npm-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
         uses: nick-fields/retry@v2
@@ -66,12 +66,13 @@ jobs:
           retry_on: error
           command: |
             cd lens
-            yarn install --frozen-lockfile
+            npm run all:install
 
       - name: Build Linux Lens
         working-directory: lens
         run: |
-          yarn run build:app
+          # when installing dependencies lens specifies a specific version of npm
+          npx npm run build:app
         shell: bash
         if: ${{ runner.os == 'Linux' }}
         env:
@@ -80,7 +81,7 @@ jobs:
       - name: Build macOS Lens
         working-directory: lens
         run: |
-          yarn run build:app
+          npx npm run build:app
         shell: bash
         if: ${{ runner.os == 'macOS' }}
         env:
@@ -89,7 +90,7 @@ jobs:
       - name: Build Windows Lens
         working-directory: lens
         run: |
-          yarn run build:app
+          npx npm run build:app
         shell: bash
         if: ${{ runner.os == 'Windows' }}
         env:
@@ -101,13 +102,13 @@ jobs:
         run: certutil -hashfile OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe SHA256 | tee OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe.sha256
         shell: bash
         if: ${{ runner.os == 'Windows' }}
-        working-directory: lens/packages/open-lens/dist
+        working-directory: lens/open-lens/dist
 
       - name: Calculate Linux and Mac checksum
         run: for filename in OpenLens-${{ steps.version.outputs.LENS_VERSION }}*; do shasum -a 256 ${filename} | tee ${filename}.sha256 ; done
         shell: bash
         if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
-        working-directory: lens/packages/open-lens/dist
+        working-directory: lens/open-lens/dist
 
       - uses: actions/upload-artifact@v3
         if: github.ref != 'refs/heads/main'
@@ -115,13 +116,13 @@ jobs:
           name: OpenLens-${{ matrix.os }}
           retention-days: 5
           path: |
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
 
       - name: Generate Changelog
         run: curl -s https://api.github.com/repos/lensapp/lens/releases/tags/v${{ steps.version.outputs.LENS_VERSION }} | jq -r '.body' > ${{ github.workspace }}-CHANGELOG.txt
@@ -133,13 +134,13 @@ jobs:
           tag_name: v${{ steps.version.outputs.LENS_VERSION }}
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           files: |
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
-            lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+            lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
 
       # Commenting out due to the need to install extensions after upgrading
       # after a version.  This seemed safer than publishing to the auto upgrade
@@ -151,11 +152,11 @@ jobs:
       ##  with:
       ##    tag_name: Latest
       ##    files: |
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
-      ##      lens/packages/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
-      ##      lens/packages/open-lens/dist/lates*.yml
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.dmg
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.AppImage
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.deb
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.rpm
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.zip
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}.exe
+      ##      lens/open-lens/dist/OpenLens-${{ steps.version.outputs.LENS_VERSION }}*.sha256
+      ##      lens/open-lens/dist/lates*.yml
