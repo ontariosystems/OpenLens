@@ -1,6 +1,11 @@
 # ontariosystems/OpenLens 
 ---
 
+This repository is no longer being actively worked on.  Suggest using the open source [FreeLens](https://github.com/freelensapp/freelens) project. 
+
+---
+
+
 [![Latest Release](https://img.shields.io/github/release/ontariosystems/OpenLens.svg)](https://github.com/ontariosystems/OpenLens/releases)
 [![Build Status](https://github.com/ontariosystems/OpenLens/actions/workflows/main.yml/badge.svg)](https://github.com/ontariosystems/OpenLens/actions/workflows/main.yml)
 
